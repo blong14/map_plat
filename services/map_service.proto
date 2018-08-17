@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package services;
+
+// PointRequest
+message PointRequest {}
+
+// Points are represented as latitude-longitude pairs and counts
+message Point {
+  string latitude = 1;
+  string longitude = 2;
+  int64 count = 3;
+}
+
+service MapService {
+
+    // A server-to-client streaming RPC.
+    //
+    // Streams all IPv6 data points
+    rpc List(PointRequest) returns (stream Point) {}
+}

@@ -5,6 +5,8 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+*.crt
+*.key
 
 # Log files
 npm-debug.log*
@@ -22,3 +24,4 @@ yarn-error.log*
 
 # Python
 venv
+*.csv
