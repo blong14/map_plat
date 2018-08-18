@@ -8,8 +8,7 @@ class GrpcClient {
 
     constructor() {
         this.client = grpc.client(window.exports.MapService.List, {
-            //TODO: Move this to configuration
-            host: 'https://localhost:3000'
+            host: process.env.VUE_APP_API_URL
         });
         this.layer = [];
     }
