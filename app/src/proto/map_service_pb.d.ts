@@ -1,5 +1,5 @@
-// package: services
-// file: map_service.proto
+// package: proto
+// file: proto/map_service.proto
 
 import * as jspb from "google-protobuf";
 

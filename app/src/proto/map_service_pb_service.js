@@ -1,12 +1,12 @@
-// package: services
-// file: map_service.proto
+// package: proto
+// file: proto/map_service.proto
 
-var map_service_pb = require("./map_service_pb");
+var proto_map_service_pb = require("../proto/map_service_pb");
 var grpc = require("grpc-web-client").grpc;
 
 var MapService = (function () {
   function MapService() {}
-  MapService.serviceName = "services.MapService";
+  MapService.serviceName = "proto.MapService";
   return MapService;
 }());
 
@@ -15,8 +15,8 @@ MapService.List = {
   service: MapService,
   requestStream: false,
   responseStream: true,
-  requestType: map_service_pb.PointRequest,
-  responseType: map_service_pb.Point
+  requestType: proto_map_service_pb.PointRequest,
+  responseType: proto_map_service_pb.Point
 };
 
 MapService.Get = {
@@ -24,8 +24,8 @@ MapService.Get = {
   service: MapService,
   requestStream: false,
   responseStream: false,
-  requestType: map_service_pb.PointRequest,
-  responseType: map_service_pb.Points
+  requestType: proto_map_service_pb.PointRequest,
+  responseType: proto_map_service_pb.Points
 };
 
 exports.MapService = MapService;

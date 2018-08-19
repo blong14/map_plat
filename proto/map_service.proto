@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package services;
+package proto;
 
 // PointRequest
 message PointRequest {}

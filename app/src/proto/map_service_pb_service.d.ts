@@ -1,7 +1,7 @@
-// package: services
-// file: map_service.proto
+// package: proto
+// file: proto/map_service.proto
 
-import * as map_service_pb from "./map_service_pb";
+import * as proto_map_service_pb from "../proto/map_service_pb";
 import {grpc} from "grpc-web-client";
 
 type MapServiceList = {
@@ -9,8 +9,8 @@ type MapServiceList = {
   readonly service: typeof MapService;
   readonly requestStream: false;
   readonly responseStream: true;
-  readonly requestType: typeof map_service_pb.PointRequest;
-  readonly responseType: typeof map_service_pb.Point;
+  readonly requestType: typeof proto_map_service_pb.PointRequest;
+  readonly responseType: typeof proto_map_service_pb.Point;
 };
 
 type MapServiceGet = {
@@ -18,8 +18,8 @@ type MapServiceGet = {
   readonly service: typeof MapService;
   readonly requestStream: false;
   readonly responseStream: false;
-  readonly requestType: typeof map_service_pb.PointRequest;
-  readonly responseType: typeof map_service_pb.Points;
+  readonly requestType: typeof proto_map_service_pb.PointRequest;
+  readonly responseType: typeof proto_map_service_pb.Points;
 };
 
 export class MapService {
@@ -43,15 +43,15 @@ export class MapServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
-  list(requestMessage: map_service_pb.PointRequest, metadata?: grpc.Metadata): ResponseStream<map_service_pb.Point>;
+  list(requestMessage: proto_map_service_pb.PointRequest, metadata?: grpc.Metadata): ResponseStream<proto_map_service_pb.Point>;
   get(
-    requestMessage: map_service_pb.PointRequest,
+    requestMessage: proto_map_service_pb.PointRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError, responseMessage: map_service_pb.Points|null) => void
+    callback: (error: ServiceError, responseMessage: proto_map_service_pb.Points|null) => void
   ): void;
   get(
-    requestMessage: map_service_pb.PointRequest,
-    callback: (error: ServiceError, responseMessage: map_service_pb.Points|null) => void
+    requestMessage: proto_map_service_pb.PointRequest,
+    callback: (error: ServiceError, responseMessage: proto_map_service_pb.Points|null) => void
   ): void;
 }
 

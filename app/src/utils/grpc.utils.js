@@ -1,7 +1,6 @@
 import { grpc } from 'grpc-web-client'; 
 require('@/proto/map_service_pb_service');
-
-import { PointRequest } from '@/proto/map_service_pb';
+const messages = require('@/proto/map_service_pb');
 
 
 class GrpcClient {
@@ -14,7 +13,7 @@ class GrpcClient {
     }
 
     sendPointRequest(map) {
-        const req = new PointRequest();
+        const req = new messages.PointRequest();
 
         this.client.onMessage((message) => {
             const data = message.toObject();
