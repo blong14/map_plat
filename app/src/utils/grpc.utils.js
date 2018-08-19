@@ -1,7 +1,7 @@
 import { grpc } from 'grpc-web-client'; 
-require('../../services/map_service_pb_service');
+require('@/proto/map_service_pb_service');
 
-import { PointRequest } from '../../services/map_service_pb';
+import { PointRequest } from '@/proto/map_service_pb';
 
 
 class GrpcClient {

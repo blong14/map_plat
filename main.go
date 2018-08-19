@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/blong14/map_plat/api"
-	pb "github.com/blong14/map_plat/services"
+	pb "github.com/blong14/map_plat/proto"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 )
 

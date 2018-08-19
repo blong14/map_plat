@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	pb "github.com/blong14/map_plat/services"
+	pb "github.com/blong14/map_plat/proto"
 	"google.golang.org/grpc"
 )
 

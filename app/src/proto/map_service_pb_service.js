@@ -19,6 +19,15 @@ MapService.List = {
   responseType: map_service_pb.Point
 };
 
+MapService.Get = {
+  methodName: "Get",
+  service: MapService,
+  requestStream: false,
+  responseStream: false,
+  requestType: map_service_pb.PointRequest,
+  responseType: map_service_pb.Points
+};
+
 exports.MapService = MapService;
 
 function MapServiceClient(serviceHost, options) {
@@ -63,6 +72,28 @@ MapServiceClient.prototype.list = function list(requestMessage, metadata) {
       client.close();
     }
   };
+};
+
+MapServiceClient.prototype.get = function get(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  grpc.unary(MapService.Get, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
 };
 
 exports.MapServiceClient = MapServiceClient;

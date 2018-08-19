@@ -47,3 +47,25 @@ export namespace Point {
   }
 }
 
+export class Points extends jspb.Message {
+  clearPointsList(): void;
+  getPointsList(): Array<Point>;
+  setPointsList(value: Array<Point>): void;
+  addPoints(value?: Point, index?: number): Point;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Points.AsObject;
+  static toObject(includeInstance: boolean, msg: Points): Points.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Points, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Points;
+  static deserializeBinaryFromReader(message: Points, reader: jspb.BinaryReader): Points;
+}
+
+export namespace Points {
+  export type AsObject = {
+    pointsList: Array<Point.AsObject>,
+  }
+}
+

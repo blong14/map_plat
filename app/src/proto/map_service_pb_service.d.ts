@@ -13,9 +13,19 @@ type MapServiceList = {
   readonly responseType: typeof map_service_pb.Point;
 };
 
+type MapServiceGet = {
+  readonly methodName: string;
+  readonly service: typeof MapService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof map_service_pb.PointRequest;
+  readonly responseType: typeof map_service_pb.Points;
+};
+
 export class MapService {
   static readonly serviceName: string;
   static readonly List: MapServiceList;
+  static readonly Get: MapServiceGet;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -34,5 +44,14 @@ export class MapServiceClient {
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
   list(requestMessage: map_service_pb.PointRequest, metadata?: grpc.Metadata): ResponseStream<map_service_pb.Point>;
+  get(
+    requestMessage: map_service_pb.PointRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError, responseMessage: map_service_pb.Points|null) => void
+  ): void;
+  get(
+    requestMessage: map_service_pb.PointRequest,
+    callback: (error: ServiceError, responseMessage: map_service_pb.Points|null) => void
+  ): void;
 }
 

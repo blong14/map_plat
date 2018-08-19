@@ -34,7 +34,7 @@ func (m *PointRequest) Reset()         { *m = PointRequest{} }
 func (m *PointRequest) String() string { return proto.CompactTextString(m) }
 func (*PointRequest) ProtoMessage()    {}
 func (*PointRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_map_service_b42a29a5331fb92f, []int{0}
+	return fileDescriptor_map_service_df287392aeb4f35c, []int{0}
 }
 func (m *PointRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PointRequest.Unmarshal(m, b)
@@ -68,7 +68,7 @@ func (m *Point) Reset()         { *m = Point{} }
 func (m *Point) String() string { return proto.CompactTextString(m) }
 func (*Point) ProtoMessage()    {}
 func (*Point) Descriptor() ([]byte, []int) {
-	return fileDescriptor_map_service_b42a29a5331fb92f, []int{1}
+	return fileDescriptor_map_service_df287392aeb4f35c, []int{1}
 }
 func (m *Point) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Point.Unmarshal(m, b)
@@ -109,9 +109,48 @@ func (m *Point) GetCount() int64 {
 	return 0
 }
 
+type Points struct {
+	Points               []*Point `protobuf:"bytes,1,rep,name=points,proto3" json:"points,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Points) Reset()         { *m = Points{} }
+func (m *Points) String() string { return proto.CompactTextString(m) }
+func (*Points) ProtoMessage()    {}
+func (*Points) Descriptor() ([]byte, []int) {
+	return fileDescriptor_map_service_df287392aeb4f35c, []int{2}
+}
+func (m *Points) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Points.Unmarshal(m, b)
+}
+func (m *Points) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Points.Marshal(b, m, deterministic)
+}
+func (dst *Points) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Points.Merge(dst, src)
+}
+func (m *Points) XXX_Size() int {
+	return xxx_messageInfo_Points.Size(m)
+}
+func (m *Points) XXX_DiscardUnknown() {
+	xxx_messageInfo_Points.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Points proto.InternalMessageInfo
+
+func (m *Points) GetPoints() []*Point {
+	if m != nil {
+		return m.Points
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*PointRequest)(nil), "services.PointRequest")
 	proto.RegisterType((*Point)(nil), "services.Point")
+	proto.RegisterType((*Points)(nil), "services.Points")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -130,6 +169,7 @@ type MapServiceClient interface {
 	//
 	// Streams all IPv6 data points
 	List(ctx context.Context, in *PointRequest, opts ...grpc.CallOption) (MapService_ListClient, error)
+	Get(ctx context.Context, in *PointRequest, opts ...grpc.CallOption) (*Points, error)
 }
 
 type mapServiceClient struct {
@@ -172,12 +212,22 @@ func (x *mapServiceListClient) Recv() (*Point, error) {
 	return m, nil
 }
 
+func (c *mapServiceClient) Get(ctx context.Context, in *PointRequest, opts ...grpc.CallOption) (*Points, error) {
+	out := new(Points)
+	err := c.cc.Invoke(ctx, "/services.MapService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MapServiceServer is the server API for MapService service.
 type MapServiceServer interface {
 	// A server-to-client streaming RPC.
 	//
 	// Streams all IPv6 data points
 	List(*PointRequest, MapService_ListServer) error
+	Get(context.Context, *PointRequest) (*Points, error)
 }
 
 func RegisterMapServiceServer(s *grpc.Server, srv MapServiceServer) {
@@ -205,10 +255,33 @@ func (x *mapServiceListServer) Send(m *Point) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _MapService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PointRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MapServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/services.MapService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MapServiceServer).Get(ctx, req.(*PointRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _MapService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "services.MapService",
 	HandlerType: (*MapServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Get",
+			Handler:    _MapService_Get_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "List",
@@ -219,19 +292,21 @@ var _MapService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "map_service.proto",
 }
 
-func init() { proto.RegisterFile("map_service.proto", fileDescriptor_map_service_b42a29a5331fb92f) }
+func init() { proto.RegisterFile("map_service.proto", fileDescriptor_map_service_df287392aeb4f35c) }
 
-var fileDescriptor_map_service_b42a29a5331fb92f = []byte{
-	// 163 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_map_service_df287392aeb4f35c = []byte{
+	// 204 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0xcc, 0x4d, 0x2c, 0x88,
 	0x2f, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80,
 	0x72, 0x8b, 0x95, 0xf8, 0xb8, 0x78, 0x02, 0xf2, 0x33, 0xf3, 0x4a, 0x82, 0x52, 0x0b, 0x4b, 0x53,
 	0x8b, 0x4b, 0x94, 0xc2, 0xb9, 0x58, 0xc1, 0x7c, 0x21, 0x29, 0x2e, 0x8e, 0x9c, 0xc4, 0x92, 0xcc,
 	0x92, 0xd2, 0x94, 0x54, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce, 0x20, 0x38, 0x5f, 0x48, 0x86, 0x8b,
 	0x33, 0x27, 0x3f, 0x2f, 0x1d, 0x22, 0xc9, 0x04, 0x96, 0x44, 0x08, 0x08, 0x89, 0x70, 0xb1, 0x26,
-	0xe7, 0x97, 0xe6, 0x95, 0x48, 0x30, 0x2b, 0x30, 0x6a, 0x30, 0x07, 0x41, 0x38, 0x46, 0x8e, 0x5c,
-	0x5c, 0xbe, 0x89, 0x05, 0xc1, 0x10, 0x7b, 0x85, 0x8c, 0xb9, 0x58, 0x7c, 0x32, 0x8b, 0x4b, 0x84,
-	0xc4, 0xf4, 0x60, 0x2e, 0xd1, 0x43, 0x76, 0x86, 0x14, 0x3f, 0x9a, 0xb8, 0x12, 0x83, 0x01, 0x63,
-	0x12, 0x1b, 0xd8, 0xf1, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7a, 0xef, 0x50, 0xc5, 0xd1,
-	0x00, 0x00, 0x00,
+	0xe7, 0x97, 0xe6, 0x95, 0x48, 0x30, 0x2b, 0x30, 0x6a, 0x30, 0x07, 0x41, 0x38, 0x4a, 0x86, 0x5c,
+	0x6c, 0x60, 0x83, 0x8b, 0x85, 0xd4, 0xb9, 0xd8, 0x0a, 0xc0, 0x2c, 0x09, 0x46, 0x05, 0x66, 0x0d,
+	0x6e, 0x23, 0x7e, 0x3d, 0x98, 0x6b, 0xf4, 0x20, 0x4e, 0x81, 0x4a, 0x1b, 0x95, 0x70, 0x71, 0xf9,
+	0x26, 0x16, 0x04, 0x43, 0x24, 0x85, 0x8c, 0xb9, 0x58, 0x7c, 0x32, 0x8b, 0x4b, 0x84, 0xc4, 0xd0,
+	0x95, 0x43, 0x5c, 0x2e, 0x85, 0x6e, 0x8c, 0x12, 0x83, 0x01, 0xa3, 0x90, 0x21, 0x17, 0xb3, 0x7b,
+	0x2a, 0x6e, 0x3d, 0x02, 0x68, 0xe2, 0xc5, 0x4a, 0x0c, 0x49, 0x6c, 0xe0, 0x20, 0x32, 0x06, 0x04,
+	0x00, 0x00, 0xff, 0xff, 0x2e, 0xdc, 0xc8, 0x08, 0x37, 0x01, 0x00, 0x00,
 }
