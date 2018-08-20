@@ -1,6 +1,10 @@
 <template>
     <header class="header">
-        <p>header</p>
+        <nav class="flex items-center justify-between flex-wrap bg-primary p-6">
+            <div class="flex items-center flex-no-shrink text-white mr-6">
+                <span class="font-semibold text-xl tracking-tight">Map-Plat</span>
+            </div>
+        </nav>
     </header>
 </template>
 
@@ -9,7 +13,3 @@
         name: 'mpHeader'
     }
 </script>
-
-<style scoped>
-
-</style>

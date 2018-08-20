@@ -1,31 +1,26 @@
 <template>
     <div id="app">
         <mp-header></mp-header>
-        <mp-map v-bind:lat="lat" v-bind:long="long"></mp-map>
+        <mp-body></mp-body>
         <mp-footer></mp-footer>
     </div>
 </template>
 
+<style src="@/assets/css/main.css"></style>
+
 <script>
-    import MpFooter from './components/MpFooter.vue'
-    import MpHeader from './components/MpHeader.vue'
-    import MpMap from './components/MpMap.vue'
+    import MpBody from '@/components/MpBody.vue'
+    import MpFooter from '@/components/MpFooter.vue'
+    import MpHeader from '@/components/MpHeader.vue'
 
     export default {
 
         name: 'app',
 
         components: {
-            MpMap,
+            MpBody,
             MpFooter,
             MpHeader
         },
-
-        data: function() {
-            return {
-                lat: 51.505,
-                long: -0.09
-            }
-        }
     }
 </script>

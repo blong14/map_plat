@@ -1,12 +1,11 @@
 <template>
-    <div class="map">
-        <div id="map-container"></div>
-    </div>
+    <div id="map-container" class="rounded"></div>
 </template>
 
 <script>
-    import GrpcService from '@/utils/grpc.utils';
-    import MapFactory from '@/utils/map.utils';
+    import GrpcService from '@/services/grpc.service';
+    import MapFactory from '@/services/map.service';
+    
 
     export default {
         name: 'mpMap',
@@ -59,10 +58,10 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
     #map-container {
-        height: 100vh;
+        height: 100%;
     }
   
 </style>
