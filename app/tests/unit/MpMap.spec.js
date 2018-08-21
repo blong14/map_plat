@@ -3,8 +3,8 @@ import { assert } from 'chai'
 import sinon from 'sinon'
 
 import MpMap from '@/components/MpMap.vue'
-import MapFactory from '@/utils/map.utils.js'
-import GrpcService from '@/utils/grpc.utils.js'
+import MapFactory from '@/services/map.service.js'
+import GrpcService from '@/services/grpc.service.js'
 
 import GrpcServiceClientMock from '~/mocks/grpc.mock.js'
 

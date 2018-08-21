@@ -16,7 +16,8 @@ class Map {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
                 id: 'mapbox.streets',
-                accessToken: this.token
+                accessToken: this.token,
+                blur: 40
             }
         }
         this.postInit();
@@ -43,9 +44,12 @@ class Map {
     }
 
     setHeatLayer(layer) {
-        this.window.L
-            .heatLayer(layer)
-            .addTo(this.world);
+        if (!this.heat) {
+            this.heat = this.window.L.heatLayer(layer, {blur: this.mapConfig.layerConfig.blur})
+            this.heat.addTo(this.world)
+        } else {
+            this.heat.setLatLngs(layer)
+        }
         return this;
     }
 }

@@ -2,26 +2,32 @@ syntax = "proto3";
 
 package proto;
 
-// PointRequest
-message PointRequest {}
-
 // Points are represented as latitude-longitude pairs and counts
 message Point {
   string latitude = 1;
   string longitude = 2;
-  int64 count = 3;
+  uint32 count = 3;
 }
 
-message Points {
+// PointRequest
+message PointRequest {}
+
+// BoundedPointsRequest
+message BoundedPointsRequest {
+  Point lowerLeft  = 1;
+  Point upperRight = 2;
+}
+
+// PointsResponse contains points for the client
+message PointsResponse {
   repeated Point points = 1;
 }
 
 service MapService {
 
-    // A server-to-client streaming RPC.
-    //
     // Streams all IPv6 data points
-    rpc List(PointRequest) returns (stream Point) {}
+    rpc AllPoints(PointRequest) returns (PointsResponse) {}
 
-    rpc Get(PointRequest) returns (Points) {}
+    // Streams Points bounded by coordinates
+    rpc BoundedPoints(BoundedPointsRequest) returns (PointsResponse) {}
 }

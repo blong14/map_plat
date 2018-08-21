@@ -4,28 +4,28 @@
 import * as proto_map_service_pb from "../proto/map_service_pb";
 import {grpc} from "grpc-web-client";
 
-type MapServiceList = {
-  readonly methodName: string;
-  readonly service: typeof MapService;
-  readonly requestStream: false;
-  readonly responseStream: true;
-  readonly requestType: typeof proto_map_service_pb.PointRequest;
-  readonly responseType: typeof proto_map_service_pb.Point;
-};
-
-type MapServiceGet = {
+type MapServiceAllPoints = {
   readonly methodName: string;
   readonly service: typeof MapService;
   readonly requestStream: false;
   readonly responseStream: false;
   readonly requestType: typeof proto_map_service_pb.PointRequest;
-  readonly responseType: typeof proto_map_service_pb.Points;
+  readonly responseType: typeof proto_map_service_pb.PointsResponse;
+};
+
+type MapServiceBoundedPoints = {
+  readonly methodName: string;
+  readonly service: typeof MapService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof proto_map_service_pb.BoundedPointsRequest;
+  readonly responseType: typeof proto_map_service_pb.PointsResponse;
 };
 
 export class MapService {
   static readonly serviceName: string;
-  static readonly List: MapServiceList;
-  static readonly Get: MapServiceGet;
+  static readonly AllPoints: MapServiceAllPoints;
+  static readonly BoundedPoints: MapServiceBoundedPoints;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -43,15 +43,23 @@ export class MapServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
-  list(requestMessage: proto_map_service_pb.PointRequest, metadata?: grpc.Metadata): ResponseStream<proto_map_service_pb.Point>;
-  get(
+  allPoints(
     requestMessage: proto_map_service_pb.PointRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError, responseMessage: proto_map_service_pb.Points|null) => void
+    callback: (error: ServiceError, responseMessage: proto_map_service_pb.PointsResponse|null) => void
   ): void;
-  get(
+  allPoints(
     requestMessage: proto_map_service_pb.PointRequest,
-    callback: (error: ServiceError, responseMessage: proto_map_service_pb.Points|null) => void
+    callback: (error: ServiceError, responseMessage: proto_map_service_pb.PointsResponse|null) => void
+  ): void;
+  boundedPoints(
+    requestMessage: proto_map_service_pb.BoundedPointsRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError, responseMessage: proto_map_service_pb.PointsResponse|null) => void
+  ): void;
+  boundedPoints(
+    requestMessage: proto_map_service_pb.BoundedPointsRequest,
+    callback: (error: ServiceError, responseMessage: proto_map_service_pb.PointsResponse|null) => void
   ): void;
 }
 

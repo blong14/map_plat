@@ -6,22 +6,38 @@ const messages = require('@/proto/map_service_pb');
 class GrpcClient {
 
     constructor() {
-        this.client = grpc.client(window.exports.MapService.List, {
+        this.client = grpc.client(window.exports.MapService.AllPoints, {
             host: process.env.VUE_APP_API_URL
         });
         this.layer = [];
     }
 
-    sendPointRequest(map) {
+    sendPointRequest(callback) {
         const req = new messages.PointRequest();
 
+        this.send(req, callback);
+    }
+
+    getBoundedPoints(args, callback) {
+        const req = new messages.BoundedPointsRequest();
+        req.setUpperright(args.upperLeft);
+        req.setLowerleft(args.lowerLeft);
+
+        this.send(req, callback)
+    }
+
+    send(req, callback) {
         this.client.onMessage((message) => {
-            const data = message.toObject();
-            this.layer.push([data.latitude, data.longitude, data.count]);
+            this.layer = message.getPointsList()
+                                .map((f) => [
+                                    f.getLatitude(),
+                                    f.getLongitude(),
+                                    f.getCount()
+                                ]);
         });
         
         this.client.onEnd(() => {
-            map.setHeatLayer(this.layer);
+            callback(this.layer)
         });
 
         this.client.start();

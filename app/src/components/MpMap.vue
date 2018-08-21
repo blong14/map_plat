@@ -3,20 +3,20 @@
 </template>
 
 <script>
-    import GrpcService from '@/services/grpc.service';
     import MapFactory from '@/services/map.service';
     
-
     export default {
         name: 'mpMap',
 
         props: {
             lat: Number,
-            long: Number
+            long: Number,
+            layer: Array
         },
 
         data: function() {
             return {
+                heatLayer: this.layer,
                 location: [this.lat, this.long],
                 map: null
             }
@@ -33,27 +33,20 @@
                 this.long = newLong;
                 this.location = [this.lat, this.long];
                 this.map.setLocation(this.location);  
+            },
+            layer: function(newLayer) {
+                this.heatLayer = newLayer;
+                this.map.setHeatLayer(this.heatLayer)
             }
         },
 
         mounted: function() {
-            const args = {
+            // Instantiate the map
+            this.map = MapFactory.build({
                 window: window,
                 selector: 'map-container',
                 location: this.location
-            };
-
-            // Instantiate the map
-            this.map = MapFactory.build(args);
-
-            this.onInitialize();
-        },
-
-        methods: {
-            onInitialize: function() {
-                const client = GrpcService.client();
-                client.sendPointRequest(this.map);
-            }
+            });
         }
     }
 </script>

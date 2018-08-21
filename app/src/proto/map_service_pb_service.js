@@ -10,22 +10,22 @@ var MapService = (function () {
   return MapService;
 }());
 
-MapService.List = {
-  methodName: "List",
-  service: MapService,
-  requestStream: false,
-  responseStream: true,
-  requestType: proto_map_service_pb.PointRequest,
-  responseType: proto_map_service_pb.Point
-};
-
-MapService.Get = {
-  methodName: "Get",
+MapService.AllPoints = {
+  methodName: "AllPoints",
   service: MapService,
   requestStream: false,
   responseStream: false,
   requestType: proto_map_service_pb.PointRequest,
-  responseType: proto_map_service_pb.Points
+  responseType: proto_map_service_pb.PointsResponse
+};
+
+MapService.BoundedPoints = {
+  methodName: "BoundedPoints",
+  service: MapService,
+  requestStream: false,
+  responseStream: false,
+  requestType: proto_map_service_pb.BoundedPointsRequest,
+  responseType: proto_map_service_pb.PointsResponse
 };
 
 exports.MapService = MapService;
@@ -35,50 +35,33 @@ function MapServiceClient(serviceHost, options) {
   this.options = options || {};
 }
 
-MapServiceClient.prototype.list = function list(requestMessage, metadata) {
-  var listeners = {
-    data: [],
-    end: [],
-    status: []
-  };
-  var client = grpc.invoke(MapService.List, {
+MapServiceClient.prototype.allPoints = function allPoints(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  grpc.unary(MapService.AllPoints, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
     transport: this.options.transport,
     debug: this.options.debug,
-    onMessage: function (responseMessage) {
-      listeners.data.forEach(function (handler) {
-        handler(responseMessage);
-      });
-    },
-    onEnd: function (status, statusMessage, trailers) {
-      listeners.end.forEach(function (handler) {
-        handler();
-      });
-      listeners.status.forEach(function (handler) {
-        handler({ code: status, details: statusMessage, metadata: trailers });
-      });
-      listeners = null;
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+        } else {
+          callback(null, response.message);
+        }
+      }
     }
   });
-  return {
-    on: function (type, handler) {
-      listeners[type].push(handler);
-      return this;
-    },
-    cancel: function () {
-      listeners = null;
-      client.close();
-    }
-  };
 };
 
-MapServiceClient.prototype.get = function get(requestMessage, metadata, callback) {
+MapServiceClient.prototype.boundedPoints = function boundedPoints(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  grpc.unary(MapService.Get, {
+  grpc.unary(MapService.BoundedPoints, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
