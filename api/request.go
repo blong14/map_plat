@@ -53,6 +53,8 @@ func Handler(resp http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	resp.Header().Add("Cache-Control", "public, max-age=31536000")
+
 	FileHandler.ServeHTTP(resp, req)
 }
 

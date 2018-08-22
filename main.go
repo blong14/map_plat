@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/NYTimes/gziphandler"
 	"github.com/blong14/map_plat/api"
 )
 
@@ -26,11 +27,12 @@ func main() {
 	}
 
 	grpcWebServer := http.Server{
-		Addr:    fmt.Sprintf(":%s", port),
-		Handler: http.HandlerFunc(api.Handler),
+		Addr: fmt.Sprintf(":%s", port),
 	}
 
-	http.Handle("/", http.StripPrefix("dist", api.FileHandler))
+	withGz := gziphandler.GzipHandler(http.HandlerFunc(api.Handler))
+
+	http.Handle("/", withGz)
 
 	log.Printf("GRPC Server listening on port: %s\n", port)
 	if err := grpcWebServer.ListenAndServeTLS(cert, key); err != nil {
