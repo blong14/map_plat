@@ -50,4 +50,24 @@ describe('MpBoundedBox.vue', function () {
 
         expect(wrapper.emitted().clear).to.be.an('array').that.is.not.empty;
     })
+
+    it('toggles box display', () => {
+        const btn = wrapper.find('.box__container-toggle')
+
+        expect(btn.classes()).to.include('toggled')
+
+        btn.trigger('click')
+
+        expect(btn.classes()).to.not.include('toggled')
+    })
+
+    it('hides form on toggle', () => {
+        const btn = wrapper.find('.box__container-toggle')
+
+        expect(wrapper.find('form').classes()).to.not.include('hide')
+
+        btn.trigger('click')
+
+        expect(wrapper.find('form').classes()).to.include('hide')
+    })
 });

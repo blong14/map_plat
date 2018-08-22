@@ -1,8 +1,6 @@
 <template>
     <div id="app">
-        <mp-header></mp-header>
         <mp-body></mp-body>
-        <mp-footer></mp-footer>
     </div>
 </template>
 
@@ -10,8 +8,6 @@
 
 <script>
     import MpBody from '@/components/MpBody.vue'
-    import MpFooter from '@/components/MpFooter.vue'
-    import MpHeader from '@/components/MpHeader.vue'
 
     export default {
 
@@ -19,8 +15,6 @@
 
         components: {
             MpBody,
-            MpFooter,
-            MpHeader
         },
     }
 </script>

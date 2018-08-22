@@ -1,9 +1,9 @@
 <template>
-    <div class="flex">
-        <div class="w-1/4 text-grey-darker text-center px-1 py-2">
+    <div class="w-full">
+        <div class="box absolute pin-r max-w-md right m-6 mt-3 text-primary text-center">
             <mp-bounding-box v-on:click="onSubmit" v-on:clear="onInitialize" v-bind:isDisabled="fetching"></mp-bounding-box> 
         </div>
-        <div class="map w-3/4 text-grey-darker text-center px-1 py-2">
+        <div class="map">
             <mp-map v-bind:lat="lat" v-bind:long="long" v-bind:layer="layer"></mp-map>
         </div>
     </div>
@@ -59,7 +59,11 @@
 <style scoped>
 
     .map {
-        height: 90vh;
+        height: 100vh;
+    }
+
+    .box {
+        z-index: 1000;
     }
 
 </style>

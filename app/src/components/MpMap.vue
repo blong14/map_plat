@@ -1,5 +1,5 @@
 <template>
-    <div id="map-container" class="rounded"></div>
+    <div id="map-container"></div>
 </template>
 
 <script>
