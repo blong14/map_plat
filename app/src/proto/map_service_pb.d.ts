@@ -48,15 +48,17 @@ export namespace PointRequest {
 }
 
 export class BoundedPointsRequest extends jspb.Message {
-  hasLowerleft(): boolean;
-  clearLowerleft(): void;
-  getLowerleft(): Point | undefined;
-  setLowerleft(value?: Point): void;
+  getLatmin(): string;
+  setLatmin(value: string): void;
 
-  hasUpperright(): boolean;
-  clearUpperright(): void;
-  getUpperright(): Point | undefined;
-  setUpperright(value?: Point): void;
+  getLatmax(): string;
+  setLatmax(value: string): void;
+
+  getLongmin(): string;
+  setLongmin(value: string): void;
+
+  getLongmax(): string;
+  setLongmax(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BoundedPointsRequest.AsObject;
@@ -70,8 +72,10 @@ export class BoundedPointsRequest extends jspb.Message {
 
 export namespace BoundedPointsRequest {
   export type AsObject = {
-    lowerleft?: Point.AsObject,
-    upperright?: Point.AsObject,
+    latmin: string,
+    latmax: string,
+    longmin: string,
+    longmax: string,
   }
 }
 

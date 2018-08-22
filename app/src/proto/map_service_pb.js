@@ -374,8 +374,10 @@ proto.proto.BoundedPointsRequest.prototype.toObject = function(opt_includeInstan
  */
 proto.proto.BoundedPointsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    lowerleft: (f = msg.getLowerleft()) && proto.proto.Point.toObject(includeInstance, f),
-    upperright: (f = msg.getUpperright()) && proto.proto.Point.toObject(includeInstance, f)
+    latmin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    latmax: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    longmin: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    longmax: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -413,14 +415,20 @@ proto.proto.BoundedPointsRequest.deserializeBinaryFromReader = function(msg, rea
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.proto.Point;
-      reader.readMessage(value,proto.proto.Point.deserializeBinaryFromReader);
-      msg.setLowerleft(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLatmin(value);
       break;
     case 2:
-      var value = new proto.proto.Point;
-      reader.readMessage(value,proto.proto.Point.deserializeBinaryFromReader);
-      msg.setUpperright(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLatmax(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLongmin(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLongmax(value);
       break;
     default:
       reader.skipField();
@@ -451,82 +459,94 @@ proto.proto.BoundedPointsRequest.prototype.serializeBinary = function() {
  */
 proto.proto.BoundedPointsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getLowerleft();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getLatmin();
+  if (f.length > 0) {
+    writer.writeString(
       1,
-      f,
-      proto.proto.Point.serializeBinaryToWriter
+      f
     );
   }
-  f = message.getUpperright();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getLatmax();
+  if (f.length > 0) {
+    writer.writeString(
       2,
-      f,
-      proto.proto.Point.serializeBinaryToWriter
+      f
+    );
+  }
+  f = message.getLongmin();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getLongmax();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
     );
   }
 };
 
 
 /**
- * optional Point lowerLeft = 1;
- * @return {?proto.proto.Point}
+ * optional string latMin = 1;
+ * @return {string}
  */
-proto.proto.BoundedPointsRequest.prototype.getLowerleft = function() {
-  return /** @type{?proto.proto.Point} */ (
-    jspb.Message.getWrapperField(this, proto.proto.Point, 1));
+proto.proto.BoundedPointsRequest.prototype.getLatmin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {?proto.proto.Point|undefined} value */
-proto.proto.BoundedPointsRequest.prototype.setLowerleft = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
-};
-
-
-proto.proto.BoundedPointsRequest.prototype.clearLowerleft = function() {
-  this.setLowerleft(undefined);
+/** @param {string} value */
+proto.proto.BoundedPointsRequest.prototype.setLatmin = function(value) {
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * Returns whether this field is set.
- * @return {!boolean}
+ * optional string latMax = 2;
+ * @return {string}
  */
-proto.proto.BoundedPointsRequest.prototype.hasLowerleft = function() {
-  return jspb.Message.getField(this, 1) != null;
+proto.proto.BoundedPointsRequest.prototype.getLatmax = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.proto.BoundedPointsRequest.prototype.setLatmax = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional Point upperRight = 2;
- * @return {?proto.proto.Point}
+ * optional string longMin = 3;
+ * @return {string}
  */
-proto.proto.BoundedPointsRequest.prototype.getUpperright = function() {
-  return /** @type{?proto.proto.Point} */ (
-    jspb.Message.getWrapperField(this, proto.proto.Point, 2));
+proto.proto.BoundedPointsRequest.prototype.getLongmin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
-/** @param {?proto.proto.Point|undefined} value */
-proto.proto.BoundedPointsRequest.prototype.setUpperright = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
-};
-
-
-proto.proto.BoundedPointsRequest.prototype.clearUpperright = function() {
-  this.setUpperright(undefined);
+/** @param {string} value */
+proto.proto.BoundedPointsRequest.prototype.setLongmin = function(value) {
+  jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * Returns whether this field is set.
- * @return {!boolean}
+ * optional string longMax = 4;
+ * @return {string}
  */
-proto.proto.BoundedPointsRequest.prototype.hasUpperright = function() {
-  return jspb.Message.getField(this, 2) != null;
+proto.proto.BoundedPointsRequest.prototype.getLongmax = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.proto.BoundedPointsRequest.prototype.setLongmax = function(value) {
+  jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

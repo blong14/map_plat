@@ -44,7 +44,7 @@
                         class="w-full bg-grey-lightest border border-grey-lighter rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white focus:border-primary" 
                         id="grid-y-min"
                         type="text"
-                        v-model="input.yMin" 
+                        v-model="input.yMax" 
                     />
                 </div>
                 <div class="w-full mt-6">
@@ -83,27 +83,17 @@
         data: function() {
             return {
                 input: {
-                    yMin: 0,
-                    yMax: 0,
-                    xMin: 0,
-                    xMax: 0
-                },
-                grid: {
-                    lowerLeft: new messages.Point(),
-                    upperRight: new messages.Point()
+                    yMin: "",
+                    yMax: "",
+                    xMin: "",
+                    xMax: ""
                 }
             }
         },
 
         methods: {
             onSubmit: function() {
-                this.grid.lowerLeft.setLatitude(this.xMin)
-                this.grid.lowerLeft.setLongitude(this.yMin)
-
-                this.grid.upperRight.setLatitude(this.xMax)
-                this.grid.upperRight.setLongitude(this.yMax)
-                
-                this.$emit('click', this.grid)
+                this.$emit('click', this.input)
             },
             onClear: function() {
                 this.$emit('clear')

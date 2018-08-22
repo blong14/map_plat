@@ -14,8 +14,10 @@ message PointRequest {}
 
 // BoundedPointsRequest
 message BoundedPointsRequest {
-  Point lowerLeft  = 1;
-  Point upperRight = 2;
+  string latMin = 1;
+  string latMax = 2;
+  string longMin = 3;
+  string longMax = 4;
 }
 
 // PointsResponse contains points for the client

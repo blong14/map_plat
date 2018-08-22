@@ -1,0 +1,12 @@
+version: "3.7"  
+
+services:
+  db:
+    image: kartoza/postgis
+    ports:
+      - 54321:5432
+    volumes:
+      - ./data:/data
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
