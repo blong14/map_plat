@@ -9,6 +9,7 @@
         name: 'mpMap',
 
         props: {
+            box: Array,
             lat: Number,
             long: Number,
             layer: Array
@@ -16,13 +17,18 @@
 
         data: function() {
             return {
+                bounds: [],
                 heatLayer: this.layer,
                 location: [this.lat, this.long],
                 map: null
             }
         },
-
         watch: {
+            box: function(newBounds) {
+                this.map.clearBounds();
+                this.bounds = newBounds;
+                this.map.setBounds(this.bounds); 
+            },
             lat: function(newLat) {
                 this.lat = newLat;
                 this.location = [this.lat, this.long];

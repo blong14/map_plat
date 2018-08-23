@@ -88,10 +88,10 @@
         data: function() {
             return {
                 input: {
-                    yMin: "",
-                    yMax: "",
-                    xMin: "",
-                    xMax: ""
+                    yMin: "-120", // Default values
+                    yMax: "-90",
+                    xMin: "30",
+                    xMax: "60"
                 },
                 isOpen: true,
             }

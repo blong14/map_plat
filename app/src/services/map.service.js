@@ -52,6 +52,20 @@ class Map {
         }
         return this;
     }
+
+    clearBounds() {
+        if (this.bounds) {
+            this.bounds.remove();
+        } 
+    }
+
+    setBounds(bounds) {
+        if (bounds.length) {
+            this.bounds = this.window.L.rectangle(bounds, {color: 'red', weight: 1});
+            this.bounds.addTo(this.world)
+        }
+        return this;
+    }
 }
 
 const MapFactory = {
