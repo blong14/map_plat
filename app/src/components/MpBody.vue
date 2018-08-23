@@ -55,7 +55,7 @@
                 const client = GrpcService.client();
                 client.sendPointRequest(this.onUpdate); 
             },
-            onSubmit: function(data) {
+            onSubmit: function(data = {}) {
                 this.fetching = true;
                 this.lat = data.xMin;
                 this.long = data.yMin;
