@@ -19,6 +19,7 @@
     import MpMap from '@/components/MpMap.vue'
 
     import GrpcService from '@/services/grpc.service';
+    import GtfsClient from '@/services/gtfs.service';
 
     const initialLat = 37.751;
     const initialLong = -97.822; 

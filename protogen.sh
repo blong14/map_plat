@@ -13,8 +13,7 @@ fi
 
 echo "Compiling protobuf definitions"
 protoc \
-  --go_out=plugins=grpc:./ \
   --plugin=protoc-gen-ts=./app/node_modules/.bin/protoc-gen-ts \
   --ts_out=service=true:./app/src \
   --js_out=import_style=commonjs,binary:./app/src \
-  ./proto/map_service.proto
+  ./proto/*.proto
