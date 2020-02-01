@@ -9,31 +9,28 @@
         name: 'mpMap',
 
         props: {
-            box: Array,
             lat: Number,
             long: Number,
-            layer: Array
+            layer: Array,
+            agencies: Array,
+            durham: Array,
+            morgan: Array,
+            indy: Array
         },
 
         data: function() {
             return {
-                bounds: [],
                 heatLayer: this.layer,
+                agenciesLayer: this.agencies,
                 location: [this.lat, this.long],
-                map: null
+                map: null,
             }
         },
         watch: {
-            box: function(newBounds) {
-                this.map.clearBounds();
-                this.bounds = newBounds;
-                this.map.setBounds(this.bounds); 
-            },
             lat: function(newLat) {
                 this.lat = newLat;
                 this.location = [this.lat, this.long];
                 this.map.setLocation(this.location);
-
             },
             long: function(newLong) {
                 this.long = newLong;
@@ -42,7 +39,26 @@
             },
             layer: function(newLayer) {
                 this.heatLayer = newLayer;
-                this.map.setHeatLayer(this.heatLayer)
+                this.map.setHeatLayer(this.heatLayer).setPositions();
+            },
+            agencies: function(newLayer) {
+                this.agenciesLayer = newLayer;
+                this.map.setAgenciesLayer(this.agenciesLayer);
+            },
+            durham: function(newLayer) {
+                this.durham = newLayer;
+                this.map.setBounds(this.durham);
+
+            },
+            indy: function(newLayer) {
+                this.indy = newLayer;
+                this.map.setBounds(this.indy);
+
+            },
+            morgan: function(newLayer) {
+                this.morgan = newLayer;
+                this.map.setBounds(this.morgan);
+
             }
         },
 

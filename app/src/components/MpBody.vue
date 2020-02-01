@@ -1,34 +1,32 @@
 <template>
     <div class="w-full">
-        <div class="box absolute pin-r max-w-md right m-6 mt-3 text-primary text-center">
-            <mp-bounding-box v-on:click="onSubmit" v-on:clear="onInitialize" v-bind:isDisabled="fetching"></mp-bounding-box> 
-        </div>
         <div class="map">
             <mp-map 
-                v-bind:box="bounds"
                 v-bind:lat="lat"
                 v-bind:long="long"
-                v-bind:layer="layer">
+                v-bind:layer="layer"
+                v-bind:agencies="agencies"
+                v-bind:durham="durham"
+                v-bind:indy="indy"
+                v-bind:morgan="morgan">
              </mp-map>
         </div>
     </div>
 </template>
 
 <script>
-    import MpBoundingBox from '@/components/MpBoundingBox.vue'
     import MpMap from '@/components/MpMap.vue'
 
-    import GrpcService from '@/services/grpc.service';
+    import HttpService from '@/services/http.service';
 
-    const initialLat = 37.751;
-    const initialLong = -97.822; 
+    const initialLat = 39.23;
+    const initialLong = -100.5; 
 
     export default {
 
         name: 'mpBody',
 
         components: {
-            MpBoundingBox,
             MpMap
         },
 
@@ -38,7 +36,10 @@
                 lat: initialLat,
                 long: initialLong,
                 layer: [],
-                bounds: []
+                agencies: [],
+                durham: [],
+                indy: [],
+                morgan: []
             }
         },
 
@@ -51,24 +52,32 @@
                 this.fetching = true;
                 this.lat = initialLat;
                 this.long = initialLong;
-                this.bounds = [];
-                const client = GrpcService.client();
-                client.sendPointRequest(this.onUpdate); 
-            },
-            onSubmit: function(data = {}) {
-                this.fetching = true;
-                this.lat = data.xMin;
-                this.long = data.yMin;
-                this.bounds = [
-                    [data.xMin, data.yMin],
-                    [data.xMax, data.yMax]
+
+                const client = HttpService.client();
+                client.getAgencies().then((agencies) => {
+                    this.agencies = agencies;
+                });
+
+                this.durham = [
+                    [36.137041, -78.759587],
+                    [35.866374, -79.007498],
                 ];
-                const client = GrpcService.client();
-                client.getBoundedPoints(data, this.onUpdate);
-            },
-            onUpdate: function(layer) {
+                this.morgan = [
+                    [41.061978, -111.659142],
+                    [41.026229, -111.704181],
+                ];
+                this.indy = [
+                    [39.932979, -85.914823],
+                    [39.612888, -86.334583],
+                ];
+
+                [this.durham, this.morgan, this.indy].forEach((data) => {
+                    client.getBoundedPoints(data).then((layer) => {
+                        this.layer = layer;
+                    });
+                });
+
                 this.fetching = false;
-                this.layer = layer;
             }
         }
     }

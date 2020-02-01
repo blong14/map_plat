@@ -4,6 +4,8 @@
     </div>
 </template>
 
+<style src="../node_modules/leaflet.markercluster/dist/MarkerCluster.css"></style>
+<style src="../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"></style>
 <style src="@/assets/css/main.css"></style>
 
 <script>
