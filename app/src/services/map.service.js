@@ -1,13 +1,7 @@
 import 'leaflet/dist/leaflet.js';
 import './leaflet.shpfile.js'
 import 'leaflet.markercluster/dist/leaflet.markercluster.js'
-// import img from 'file-loader!./density.zip'
-// import img from 'file-loader!./county.zip'
-// import img from 'file-loader!./school.zip'
-// import img from 'file-loader!./microdata.zip'
-import nc from 'file-loader!./nc.zip'
-import utah from 'file-loader!./utah.zip'
-import indiana from 'file-loader!./indiana.zip'
+
 
 class Map {
 
@@ -16,6 +10,9 @@ class Map {
         this.location = args.location;
         this.selector = args.selector;
         this.world = null;
+        this.shapes = [];
+        this.markers = [];
+        this.agencies = [];
         this.token = process.env.VUE_APP_MAP_TOKEN;
         this.mapConfig = {
             defaultZoom: 5,
@@ -42,15 +39,23 @@ class Map {
             this.mapConfig.layerConfig
         ).addTo(this.world);
 
-        new this.window.L.Shapefile(nc).addTo(this.world);
-        new this.window.L.Shapefile(utah).addTo(this.world);
-        new this.window.L.Shapefile(indiana).addTo(this.world);
         this.markers = this.window.L.markerClusterGroup({
             // maxClusterRadius: 20,
             // disableClusteringAtZoom: 14,
             removeOutsideVisibleBounds: true,
         });
+
         this.window.L.control.scale().addTo(this.world);
+    }
+
+    setShapefile(shfile, args = {}) {
+        let options = {
+            'weight': 1,
+            'opacity': 0.65
+        }
+        options = Object.assign(options, args);
+        this.shapes.push(new this.window.L.Shapefile(shfile, options).addTo(this.world));
+        return this;
     }
 
     setLocation(location) {
@@ -64,7 +69,7 @@ class Map {
         const last = [positions[positions.length-1].lat, positions[positions.length-1].long];
         this.window.L.marker(first, this.icon('bus')).addTo(this.world);
         this.window.L.marker(last, this.icon('bus')).addTo(this.world);
-        let coords = positions.map((latlng) => [
+        const coords = positions.map((latlng) => [
             latlng.lat,
             latlng.long,
         ]);
@@ -83,9 +88,11 @@ class Map {
 
     setAgenciesLayer(layer) {
         layer.forEach((latlng) => {
-            this.window.L.marker(
+            let marker = this.window.L.marker(
                 [latlng.lat, latlng.long], this.icon('agency')
-            ).addTo(this.world);
+            )
+            marker.addTo(this.world);
+            this.agencies.push(marker);
         });
         return this;
     }
@@ -95,6 +102,18 @@ class Map {
             bounds,
             {color: 'red', weight: 2, fill: false}
         ).addTo(this.world);
+        return this;
+    }
+
+    clear(typ) {
+        switch(typ) {
+            case 'shapes':
+                this.shapes.forEach(e => this.world.removeLayer(e));
+                break;
+            case 'agencies':
+                this.agencies.forEach(e => this.world.removeLayer(e));
+                break;
+        }
         return this;
     }
 
@@ -112,12 +131,7 @@ class Map {
         }
         const icon = this.window.L.icon({
             iconUrl: url,
-            // shadowUrl: 'leaf-shadow.png',
             iconSize:     size, // size of the icon
-            // shadowSize:   [50, 64], // size of the shadow
-            // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-            // shadowAnchor: [4, 62],  // the same for the shadow
-            // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         });
         return {icon};
     }

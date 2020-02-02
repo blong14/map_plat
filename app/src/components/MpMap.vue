@@ -13,9 +13,8 @@
             long: Number,
             layer: Array,
             agencies: Array,
-            durham: Array,
-            morgan: Array,
-            indy: Array
+            bounds: Array,
+            shapes: Array
         },
 
         data: function() {
@@ -41,24 +40,23 @@
                 this.heatLayer = newLayer;
                 this.map.setHeatLayer(this.heatLayer).setPositions();
             },
+            shapes: function(newShapes) {
+                this.map.clear('shapes');
+                this.shapes = newShapes;
+                this.shapes.forEach((e) => {
+                    this.map.setShapefile(e.file, e.options);
+                });
+            },
+            bounds: function(newBounds) {
+               this.bounds = newBounds;
+               this.bounds.forEach((e) => {
+                   this.map.setBounds(e);
+               }); 
+            },
             agencies: function(newLayer) {
+                this.map.clear('agencies');
                 this.agenciesLayer = newLayer;
                 this.map.setAgenciesLayer(this.agenciesLayer);
-            },
-            durham: function(newLayer) {
-                this.durham = newLayer;
-                this.map.setBounds(this.durham);
-
-            },
-            indy: function(newLayer) {
-                this.indy = newLayer;
-                this.map.setBounds(this.indy);
-
-            },
-            morgan: function(newLayer) {
-                this.morgan = newLayer;
-                this.map.setBounds(this.morgan);
-
             }
         },
 
