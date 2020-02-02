@@ -1,5 +1,5 @@
 <template>
-    <div class="box__container">
+    <div class="box__container opacity-75">
         <div class="box__container-toggle" 
             :class="{'toggled': isOpen}"
             v-on:click="onToggle()">
