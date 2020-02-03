@@ -24,8 +24,10 @@
 
     // https://www.npms.phmsa.dot.gov/PopulationData.aspx
     // https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
-    // import density from 'file-loader!./hpa-shp_V2.zip'
-    import density from 'file-loader!./cb_2018_us_cbsa_500k.zip'
+    // https://www.census.gov/geographies/reference-maps/2018/geo/cbsa.html
+    // https://boundingbox.klokantech.com/
+    import density from 'file-loader!./hpa-shp_V2.zip'
+    // import density from 'file-loader!./cb_2018_us_cbsa_500k.zip'
     import nc from 'file-loader!./nc.zip'
     import utah from 'file-loader!./utah.zip'
     import indiana from 'file-loader!./indiana.zip'
