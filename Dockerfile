@@ -31,5 +31,7 @@ RUN apt-get update
 
 COPY --from=go-build /go/bin/mp /go/bin/mp
 COPY --from=node-build /app/dist /go/bin/dist
+COPY localhost.cert.pem /go/bin/localhost.cert.pem
+COPY localhost.key.pem /go/bin/localhost.key.pem
 
 CMD ["/go/bin/mp"]
