@@ -46,7 +46,7 @@ func main() {
 	http.Handle("/", withGz)
 
 	log.Printf("GRPC Server listening on port: %s\n", port)
-	if err := grpcWebServer.ListenAndServeTLS(lookupCert(), lookupKey()); err != nil {
+	if err := grpcWebServer.ListenAndServe(); err != nil {
 		log.Fatalf("failed starting http2 server: %v", err)
 	}
 }
