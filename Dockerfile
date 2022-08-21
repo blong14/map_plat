@@ -17,7 +17,7 @@ RUN apt-get update
 
 WORKDIR /app
 
-COPY env /app/.env
+COPY prod /app/.env
 COPY app/package.json /app
 COPY app/yarn.lock /app
 RUN yarn install
