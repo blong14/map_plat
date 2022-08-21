@@ -1,17 +1,17 @@
 <template>
-    <div class="w-full">
-        <div class="box absolute pin-r max-w-md right m-6 mt-3 text-primary text-center">
-            <mp-bounding-box v-on:click="onSubmit" v-on:clear="onInitialize" v-bind:isDisabled="fetching"></mp-bounding-box> 
-        </div>
-        <div class="map">
-            <mp-map 
-                v-bind:box="bounds"
-                v-bind:lat="lat"
-                v-bind:long="long"
-                v-bind:layer="layer">
-             </mp-map>
-        </div>
-    </div>
+      <mp-bounding-box
+          v-on:click="onSubmit"
+          v-on:clear="onInitialize"
+          v-bind:isDisabled="fetching">
+      </mp-bounding-box>
+      <div class="map">
+          <mp-map
+              v-bind:box="bounds"
+              v-bind:initialLat="lat"
+              v-bind:initialLong="long"
+              v-bind:layer="layer">
+          </mp-map>
+      </div>
 </template>
 
 <script>

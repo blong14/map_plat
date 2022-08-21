@@ -4,8 +4,6 @@
     </div>
 </template>
 
-<style src="@/assets/css/main.css"></style>
-
 <script>
     import MpBody from '@/components/MpBody.vue'
 

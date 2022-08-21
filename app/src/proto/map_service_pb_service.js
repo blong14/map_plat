@@ -2,7 +2,7 @@
 // file: proto/map_service.proto
 
 var proto_map_service_pb = require("../proto/map_service_pb");
-var grpc = require("grpc-web-client").grpc;
+var grpc = require("@improbable-eng/grpc-web").grpc;
 
 var MapService = (function () {
   function MapService() {}
@@ -39,7 +39,7 @@ MapServiceClient.prototype.allPoints = function allPoints(requestMessage, metada
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  grpc.unary(MapService.AllPoints, {
+  var client = grpc.unary(MapService.AllPoints, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -48,20 +48,29 @@ MapServiceClient.prototype.allPoints = function allPoints(requestMessage, metada
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
         } else {
           callback(null, response.message);
         }
       }
     }
   });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
 };
 
 MapServiceClient.prototype.boundedPoints = function boundedPoints(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  grpc.unary(MapService.BoundedPoints, {
+  var client = grpc.unary(MapService.BoundedPoints, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -70,13 +79,22 @@ MapServiceClient.prototype.boundedPoints = function boundedPoints(requestMessage
     onEnd: function (response) {
       if (callback) {
         if (response.status !== grpc.Code.OK) {
-          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
         } else {
           callback(null, response.message);
         }
       }
     }
   });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
 };
 
 exports.MapServiceClient = MapServiceClient;

@@ -10,8 +10,8 @@
 
         props: {
             box: Array,
-            lat: Number,
-            long: Number,
+            initialLat: Number,
+            initialLong: Number,
             layer: Array
         },
 
@@ -19,7 +19,7 @@
             return {
                 bounds: [],
                 heatLayer: this.layer,
-                location: [this.lat, this.long],
+                location: [this.initialLat, this.initialLong],
                 map: null
             }
         },
