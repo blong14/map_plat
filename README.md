@@ -1,7 +1,7 @@
 # map_plat
 
 ## Tech
- - [tailwind.css](https://tailwindcss.com)
+ - [MVP.css](https://andybrewer.github.io/mvp/)
  - [Leaflet](https://leafletjs.com/)
  - [leaflet.heat](https://github.com/Leaflet/Leaflet.heat)
  - [Vue.js](https://vuejs.org/)
@@ -18,7 +18,6 @@
  - [certbot](https://certbot.eff.org/)
  - [gziphandler](https://github.com/NYTimes/gziphandler)
  - [pq](https://github.com/lib/pq)
- - [PostGIS](https://postgis.net/)
  - [PostgreSQL](https://www.postgresql.org/)
  
 
@@ -73,14 +72,3 @@ yarn run build
 ```
 yarn run lint
 ```
-
-### TODO for proper production deploy
-    1 Add go vendoring
-    2 Create main docker container to run application
-    3 Remove exposed port on db container
-    4 Move database connection string to use environment variables
-    5 Move utility classes from html into a component scss library
-    6 Add validation logic for the bounded box input
-    7 Add user friendly help text
-    8 Remove the need for a real database to run go tests
-

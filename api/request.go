@@ -4,10 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"net/http"
+	"os"
 
-	pb "github.com/blong14/map_plat/proto"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
+
+	pb "github.com/blong14/map_plat/proto"
 
 	// initialize pq package
 	_ "github.com/lib/pq"
@@ -16,28 +18,32 @@ import (
 var (
 	grpcHandler *grpcweb.WrappedGrpcServer
 	service     MapServiceServer
-	db          *sql.DB
-
 	// FileHandler serves static files
 	FileHandler http.Handler
 )
 
-func init() {
-	connStr := "user=docker password=docker dbname=gis port=54321 sslmode=disable"
-	db, _ = sql.Open("postgres", connStr)
-	if err := db.Ping(); err != nil {
+func MustConnect() *sql.DB {
+	dsn, ok := os.LookupEnv("dsn")
+	if !ok {
+		dsn = "user=docker password=docker dbname=gis port=54322 sslmode=disable"
+	}
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
 		panic(err)
 	}
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
+	return db
+}
 
-	service = MapServiceServer{}
-
+func init() {
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
-
+	db := MustConnect()
+	service = MapServiceServer{db: db}
 	pb.RegisterMapServiceServer(grpcServer, service)
-
 	grpcHandler = grpcweb.WrapServer(grpcServer)
-
 	FileHandler = http.FileServer(http.Dir("dist"))
 }
 
@@ -52,37 +58,34 @@ func Handler(resp http.ResponseWriter, req *http.Request) {
 		grpcHandler.ServeHTTP(resp, req)
 		return
 	}
-
 	resp.Header().Add("Cache-Control", "public, max-age=31536000")
-
 	FileHandler.ServeHTTP(resp, req)
 }
 
 //MapServiceServer implements the gRPC map service Interface
-type MapServiceServer struct{}
+type MapServiceServer struct {
+	db *sql.DB
+}
 
 // AllPoints returns all IPv6 locations
 func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (*pb.PointsResponse, error) {
-	resp := pb.PointsResponse{}
-	rows, err := db.Query("SELECT * FROM locations")
+	var resp pb.PointsResponse
+	rows, err := m.db.Query("select * from locations")
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-
+	defer func() { _ = rows.Close() }()
 	if err = processRows(rows, &resp); err != nil {
 		return nil, err
 	}
-
 	return &resp, nil
 }
 
 // BoundedPoints returns all IPv6 location for a given bounds
-func (m MapServiceServer) BoundedPoints(ctx context.Context, req *pb.BoundedPointsRequest) (*pb.PointsResponse, error) {
-	resp := pb.PointsResponse{}
-
-	rows, err := db.Query(
-		"SELECT * FROM locations WHERE (latitude between $1 and $2) AND (longitude BETWEEN $3 AND $4)",
+func (m MapServiceServer) BoundedPoints(_ context.Context, req *pb.BoundedPointsRequest) (*pb.PointsResponse, error) {
+	var resp pb.PointsResponse
+	rows, err := m.db.Query(
+		"select * from locations where (latitude between $1 and $2) and (longitude between $3 and $4)",
 		req.GetLatMin(),
 		req.GetLatMax(),
 		req.GetLongMin(),
@@ -91,11 +94,10 @@ func (m MapServiceServer) BoundedPoints(ctx context.Context, req *pb.BoundedPoin
 	if err != nil {
 		return nil, err
 	}
-
+	defer func() { _ = rows.Close() }()
 	if err = processRows(rows, &resp); err != nil {
 		return nil, err
 	}
-
 	return &resp, nil
 }
 
@@ -108,7 +110,5 @@ func processRows(rows *sql.Rows, data *pb.PointsResponse) error {
 		}
 		data.Points = append(data.Points, &point)
 	}
-	defer rows.Close()
-
 	return nil
 }
