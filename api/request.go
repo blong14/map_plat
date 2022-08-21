@@ -37,6 +37,14 @@ func MustConnect() *sql.DB {
 	return db
 }
 
+func dist() string {
+	d, ok := os.LookupEnv("dist")
+	if !ok {
+		d = "dist"
+	}
+	return d
+}
+
 func init() {
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
@@ -44,7 +52,7 @@ func init() {
 	service = MapServiceServer{db: db}
 	pb.RegisterMapServiceServer(grpcServer, service)
 	grpcHandler = grpcweb.WrapServer(grpcServer)
-	FileHandler = http.FileServer(http.Dir("dist"))
+	FileHandler = http.FileServer(http.Dir(dist()))
 }
 
 // GrpcService returns the global map service
@@ -84,13 +92,15 @@ func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (
 // BoundedPoints returns all IPv6 location for a given bounds
 func (m MapServiceServer) BoundedPoints(_ context.Context, req *pb.BoundedPointsRequest) (*pb.PointsResponse, error) {
 	var resp pb.PointsResponse
-	rows, err := m.db.Query(
-		"select * from locations where (latitude between $1 and $2) and (longitude between $3 and $4)",
-		req.GetLatMin(),
-		req.GetLatMax(),
-		req.GetLongMin(),
-		req.GetLongMax(),
-	)
+	rows, err := m.db.Query(`
+select
+	*
+from 
+    locations
+where 
+    (latitude between $1 and $2) and 
+    (longitude between $3 and $4);
+`, req.GetLatMin(), req.GetLatMax(), req.GetLongMin(), req.GetLongMax())
 	if err != nil {
 		return nil, err
 	}
