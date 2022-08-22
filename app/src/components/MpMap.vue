@@ -23,6 +23,7 @@
                 map: null
             }
         },
+
         watch: {
             box: function(newBounds) {
                 this.map.clearBounds();
@@ -42,7 +43,7 @@
             },
             layer: function(newLayer) {
                 this.heatLayer = newLayer;
-                this.map.setHeatLayer(this.heatLayer)
+                this.map.setHeatLayer(this.heatLayer);
             }
         },
 

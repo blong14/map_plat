@@ -1,7 +1,8 @@
 <template>
       <mp-bounding-box
-          v-on:click="onSubmit"
-          v-on:clear="onInitialize"
+          class="box"
+          @onsubmit="onSubmit"
+          @clear="onInitialize"
           v-bind:isDisabled="fetching">
       </mp-bounding-box>
       <div class="map">

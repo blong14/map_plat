@@ -3,7 +3,6 @@ import { MapService } from '@/proto/map_service_pb_service';
 import { BoundedPointsRequest, PointRequest } from "@/proto/map_service_pb";
 
 
-
 class GrpcClient {
 
     constructor() {
@@ -12,7 +11,6 @@ class GrpcClient {
 
     sendPointRequest(callback) {
         const req = new PointRequest();
-
         this.send(MapService.AllPoints, req, callback);
     }
 
@@ -22,8 +20,7 @@ class GrpcClient {
         req.setLatmax(`${args.xMax}`);
         req.setLongmin(`${args.yMin}`);
         req.setLongmax(`${args.yMax}`);
-
-        this.send(MapService.BoundedPoints, req, callback)
+        this.send(MapService.BoundedPoints, req, callback);
     }
 
     send(url, req, callback) {
@@ -31,16 +28,12 @@ class GrpcClient {
             request: req,
             host: process.env.VUE_APP_API_URL,
             onMessage: (message) => {
-                this.layer = message.getPointsList()
-                                .map((f) => [
-                                    f.getLatitude(),
-                                    f.getLongitude(),
-                                    f.getCount()
-                                ]);
-
+                this.layer = message.getPointsList().map((f) => {
+                    return [f.getLatitude(), f.getLongitude(), f.getCount()];
+                });
             },
             onEnd: () => {
-                callback(this.layer)
+                callback(this.layer);
             }
         });
     }

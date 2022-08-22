@@ -2,7 +2,7 @@
     <div class="box__container">
         <div class="box__container-toggle" 
             :class="{'toggled': isOpen}"
-            v-on:click="onToggle()">
+            @click="onToggle()">
             <div class="bar1"></div>
             <div class="bar2"></div>
             <div class="bar3"></div>
@@ -85,7 +85,7 @@
 
         methods: {
             onSubmit: function() {
-                this.$emit('click', this.input)
+                this.$emit('onsubmit', this.input)
             },
             onClear: function() {
                 this.$emit('clear')

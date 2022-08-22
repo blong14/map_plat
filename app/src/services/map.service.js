@@ -19,7 +19,7 @@ class Map {
                 accessToken: this.token,
                 blur: 40
             }
-        }
+        };
         this.postInit();
     }
 
@@ -45,10 +45,10 @@ class Map {
 
     setHeatLayer(layer) {
         if (!this.heat) {
-            this.heat = this.window.L.heatLayer(layer, {blur: this.mapConfig.layerConfig.blur})
-            this.heat.addTo(this.world)
+            this.heat = this.window.L.heatLayer(layer, {blur: this.mapConfig.layerConfig.blur});
+            this.heat.addTo(this.world);
         } else {
-            this.heat.setLatLngs(layer)
+            this.heat.setLatLngs(layer);
         }
         return this;
     }
@@ -60,9 +60,10 @@ class Map {
     }
 
     setBounds(bounds) {
+        bounds = JSON.parse(JSON.stringify(bounds));
         if (bounds.length) {
             this.bounds = this.window.L.rectangle(bounds, {color: 'red', weight: 1});
-            this.bounds.addTo(this.world)
+            this.bounds.addTo(this.world);
         }
         return this;
     }
@@ -74,4 +75,4 @@ const MapFactory = {
     }
 }
 
-export default MapFactory
+export default MapFactory;
