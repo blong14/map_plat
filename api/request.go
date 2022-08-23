@@ -3,12 +3,15 @@ package api
 import (
 	"context"
 	"database/sql"
+	"github.com/golang/protobuf/proto"
 	"net/http"
+	"net/rpc"
 	"os"
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 
+	gache "github.com/blong14/gache/client"
 	pb "github.com/blong14/map_plat/proto"
 
 	// initialize pq package
@@ -22,7 +25,21 @@ var (
 	FileHandler http.Handler
 )
 
-func MustConnect() *sql.DB {
+func MustGetCache() gache.GacheClient {
+	dsn, ok := os.LookupEnv("cache-dsn")
+	if !ok {
+		dsn = "localhost:8080"
+	}
+	conn, err := rpc.DialHTTP("tcp", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	return gache.New(conn, []byte("default"))
+
+}
+
+func MustGetDB() *sql.DB {
 	dsn, ok := os.LookupEnv("dsn")
 	if !ok {
 		dsn = "user=docker password=docker dbname=gis port=54322 sslmode=disable"
@@ -48,8 +65,9 @@ func dist() string {
 func init() {
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
-	db := MustConnect()
-	service = MapServiceServer{db: db}
+	cache := MustGetCache()
+	db := MustGetDB()
+	service = MapServiceServer{cache: cache, db: db}
 	pb.RegisterMapServiceServer(grpcServer, service)
 	grpcHandler = grpcweb.WrapServer(grpcServer)
 	FileHandler = http.FileServer(http.Dir(dist()))
@@ -72,12 +90,19 @@ func Handler(resp http.ResponseWriter, req *http.Request) {
 
 //MapServiceServer implements the gRPC map service Interface
 type MapServiceServer struct {
-	db *sql.DB
+	db    *sql.DB
+	cache gache.GacheClient
 }
 
 // AllPoints returns all IPv6 locations
 func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (*pb.PointsResponse, error) {
 	var resp pb.PointsResponse
+	raw, err := m.cache.Get(ctx, []byte("locations"))
+	if err == nil {
+		if err = proto.Unmarshal(raw, &resp); err == nil {
+			return &resp, nil
+		}
+	}
 	rows, err := m.db.Query("select * from locations")
 	if err != nil {
 		return nil, err
@@ -86,12 +111,14 @@ func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (
 	if err = processRows(rows, &resp); err != nil {
 		return nil, err
 	}
+	if value, err := proto.Marshal(&resp); err == nil {
+		_ = m.cache.Set(ctx, []byte("locations"), value)
+	}
 	return &resp, nil
 }
 
 // BoundedPoints returns all IPv6 location for a given bounds
 func (m MapServiceServer) BoundedPoints(_ context.Context, req *pb.BoundedPointsRequest) (*pb.PointsResponse, error) {
-	var resp pb.PointsResponse
 	rows, err := m.db.Query(`
 select
 	*
@@ -105,6 +132,7 @@ where
 		return nil, err
 	}
 	defer func() { _ = rows.Close() }()
+	var resp pb.PointsResponse
 	if err = processRows(rows, &resp); err != nil {
 		return nil, err
 	}

@@ -19,7 +19,7 @@ func TestAllPoints(t *testing.T) {
 		t.Error("should not have an error")
 	}
 
-	if len(points.Points) == 0 {
+	if len(points.GetPoints()) == 0 {
 		t.Error("should have points")
 	}
 }
@@ -40,7 +40,7 @@ func TestBoundedPoints(t *testing.T) {
 		t.Error("should not have an error")
 	}
 
-	if len(points.Points) == 0 {
+	if len(points.GetPoints()) == 0 {
 		t.Error("should have points")
 	}
 }
@@ -61,7 +61,7 @@ func TestBoundedPointsBadInput(t *testing.T) {
 		t.Error("should not have an error")
 	}
 
-	if len(points.Points) != 0 {
+	if len(points.GetPoints()) != 0 {
 		t.Error("should not have points")
 	}
 }
