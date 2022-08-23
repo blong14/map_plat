@@ -3,11 +3,12 @@ package api
 import (
 	"context"
 	"database/sql"
-	"github.com/golang/protobuf/proto"
+	"log"
 	"net/http"
 	"net/rpc"
 	"os"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 
@@ -100,7 +101,10 @@ func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (
 	raw, err := m.cache.Get(ctx, []byte("locations"))
 	if err == nil {
 		if err = proto.Unmarshal(raw, &resp); err == nil {
+			log.Println("cache hit for locations")
 			return &resp, nil
+		} else {
+			log.Println(err)
 		}
 	}
 	rows, err := m.db.Query("select * from locations")
@@ -112,7 +116,9 @@ func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (
 		return nil, err
 	}
 	if value, err := proto.Marshal(&resp); err == nil {
-		_ = m.cache.Set(ctx, []byte("locations"), value)
+		if err = m.cache.Set(ctx, []byte("locations"), value); err != nil {
+			log.Println(err)
+		}
 	}
 	return &resp, nil
 }
