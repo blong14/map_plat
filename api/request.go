@@ -106,6 +106,8 @@ func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (
 		} else {
 			log.Println(err)
 		}
+	} else if err != nil {
+		log.Println(err)
 	}
 	rows, err := m.db.Query("select * from locations")
 	if err != nil {
@@ -119,6 +121,8 @@ func (m MapServiceServer) AllPoints(ctx context.Context, req *pb.PointRequest) (
 		if err = m.cache.Set(ctx, []byte("locations"), value); err != nil {
 			log.Println(err)
 		}
+	} else {
+		log.Println(err)
 	}
 	return &resp, nil
 }
