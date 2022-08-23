@@ -11,7 +11,7 @@ require (
 )
 
 require (
-	github.com/blong14/gache v0.0.0-20220823055137-8f97aafd0a40 // indirect
+	github.com/blong14/gache v0.0.0-20220823070050-9e63b2b1ffa8 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.1 // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
