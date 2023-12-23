@@ -5,10 +5,10 @@ go 1.17
 require (
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/blong14/gache v0.0.0-20220823070050-9e63b2b1ffa8
-	github.com/golang/protobuf v1.5.2
+	github.com/golang/protobuf v1.5.3
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/lib/pq v1.10.6
-	google.golang.org/grpc v1.47.0
+	google.golang.org/grpc v1.56.3
 )
 
 require (
@@ -20,10 +20,10 @@ require (
 	github.com/rs/cors v1.7.0 // indirect
 	go.opentelemetry.io/otel v1.9.0 // indirect
 	go.opentelemetry.io/otel/trace v1.9.0 // indirect
-	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
-	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect
-	golang.org/x/text v0.3.8 // indirect
-	google.golang.org/genproto v0.0.0-20210126160654-44e461bb6506 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
+	golang.org/x/net v0.9.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
+	google.golang.org/protobuf v1.30.0 // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
 )
